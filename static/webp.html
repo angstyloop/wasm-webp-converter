@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>webp</title>
+    </head>
+    <body>
+        <div id="drop-area" style="width: 300px; height: 300px; background-color: blue;">
+        </div>
+    </body>
+</html>
+<script src="/static/a.out.js"></script>
+<script>
+    async function loadImage(blob) {
+    }
+
+    const dropArea = document.getElementById("drop-area");
+
+    Module.onRuntimeInitialized = async () => {
+        const API = {
+            version: Module.cwrap('version', 'number', []),
+            createBuffer: Module.cwrap('create_buffer', 'number', ['number', 'number']),
+            freeBuffer: Module.cwrap('free_buffer', '', ['number']),
+            encode: Module.cwrap('encode', '', ['number', 'number', 'number', 'number']),
+            freeResult: Module.cwrap('free_result', '', ['number']),
+            getResultPtr: Module.cwrap('get_result_ptr', 'number', []),
+            getResultSize: Module.cwrap('get_result_size', 'number', []),
+        };
+
+        console.log(API.version());
+
+        const upload = async (file, i) => {
+
+          const im = await createImageBitmap(file);
+          const canvas = document.createElement('canvas');
+          canvas.width = im.width;
+          canvas.height = im.height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(im, 0, 0);
+
+          const imData = ctx.getImageData(0, 0, im.width, im.height);
+
+          const buf = API.createBuffer(im.width, im.height);
+          Module.HEAP8.set(imData.data, buf);
+
+          API.encode(buf, im.width, im.height, 0);
+
+          const resultPtr = API.getResultPtr();
+          const resultSize = API.getResultSize();
+
+          let bufSize = 8192;
+          let ptr = resultPtr;
+          let resultArr = []
+
+          while (ptr < resultPtr + resultSize - bufSize) {
+              const view = new Uint8Array(Module.HEAP8.buffer, ptr, bufSize);
+              const result = new Uint8Array(view);
+              resultArr.push(result);
+              ptr += bufSize;
+          }
+            
+          if (ptr < resultPtr + resultSize) {
+              const view = new Uint8Array(Module.HEAP8.buffer, ptr, resultPtr + resultSize - ptr);
+              const result = new Uint8Array(view);
+              resultArr.push(result);
+          }
+
+          API.freeResult(resultPtr);
+          API.freeBuffer(buf);
+
+          const blob = new Blob(resultArr, {type: 'image/webp'});
+
+          let xhr = new XMLHttpRequest();
+          let formData = new FormData();
+
+          xhr.open("POST", "/upload", true);
+
+          const handleReadyStateChange = res => {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+              /* success */
+            } else if (xhr.readyState == 4 && xhr.status != 200) {
+              /* upload fail */
+            }
+          }
+
+          xhr.addEventListener("readystatechange", handleReadyStateChange, false);
+
+          formData.append("file", blob, file.name.replace(/\.\w+$/, '.webp'));
+          xhr.send(formData);
+        };
+
+        const handleDrop = e => {
+          [...e.dataTransfer.files].forEach(upload);
+        };
+
+        const preventDefaults = e => {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ["dragenter", "dragover", "dragleave", "drop"].forEach(eName => {
+          dropArea.addEventListener(eName, preventDefaults, false);
+        });
+
+        dropArea.addEventListener("drop", handleDrop, false);
+ 
+    }
+</script>
+

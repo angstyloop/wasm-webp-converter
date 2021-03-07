@@ -1,0 +1,10 @@
+#!/bin/zsh
+
+emcc -Os \
+    -s WASM=1 \
+    -s EXTRA_EXPORTED_RUNTIME_METHODS='["cwrap"]' \
+    -s ALLOW_MEMORY_GROWTH=1 \
+    -I libwebp \
+    -o static/a.out.js \
+    webp.c \
+    libwebp/src/{dec,dsp,demux,enc,mux,utils}/*.c

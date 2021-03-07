@@ -1,0 +1,21 @@
+#!/bin/sh
+
+cd uploads
+
+for im in *; do
+    echo ------------------------------
+    echo ------------------------------
+    echo $im
+    magick identify -verbose $im| grep -ie "\(filesize\|format\)"
+    ../show $im
+    echo ------------------------------
+    jpg="../test/${im%.*}.jpg"
+    echo $jpg
+    magick identify -verbose $jpg| grep -ie "\(filesize\|format\)"
+    ../show $jpg
+done
+
+echo ------------------------------
+echo ------------------------------
+
+cd ..

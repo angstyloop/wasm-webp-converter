@@ -1,3 +1,0 @@
-#!/bin/sh
-
-magick identify -verbose uploads/* | grep Format:

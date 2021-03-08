@@ -2,16 +2,104 @@
 <html>
     <head>
         <title>webp</title>
+
+        <style>
+.neon {
+    font-size: 140px;
+    color: #fff;
+    font-family: cursive;
+    letter-spacing: 14px;
+    font-weight: bold;
+}
+    @keyframes neonspark {
+        0% {
+            text-shadow: none;
+        }
+        5% {
+            text-shadow: 0 0 30px #fff;
+        }
+        6% {
+            text-shadow: none;
+        }
+        49% {
+            text-shadow: 0 0 30px #fff;
+        }
+        50% {
+            text-shadow: 0 0 10px #fff,
+                0 0 20px #fff,
+                0 0 30px #0073e6,
+                0 0 40px #0073e6,
+                0 0 50px #0073e6,
+                0 0 60px #0073e6;
+        }
+        60% {
+            text-shadow: 0 0 10px #fff,
+                0 0 20px #fff,
+                0 0 30px #0073e6,
+                0 0 40px #0073e6,
+                0 0 50px #0073e6,
+                0 0 60px #0073e6;
+        }
+        61% {
+            text-shadow: none;
+        }
+        97%% {
+            text-shadow: none;
+        }
+        98%% {
+            text-shadow: 0 0 10px #fff,
+            0 0 20px #fff,
+            0 0 30px #0073e6,
+            0 0 40px #0073e6,
+            0 0 50px #0073e6,
+            0 0 60px #0073e6,
+            0 0 70px #0073e6;        
+        }
+        99% { 
+            text-shadow: none;
+        }
+        100% {
+            text-shadow: 0 0 20px #fff,
+            0 0 30px #4da6ff,
+            0 0 40px #4da6ff,
+            0 0 50px #4da6ff,
+            0 0 60px #4da6ff,
+            0 0 70px #4da6ff,
+            0 0 80px #4da6ff;       
+        }
+
+
+    }
+
+    .neon.normal{
+        animation: neonspark 2s ease-in .5s forwards;
+    }
+
+    .neon.flicker {
+        animation: neonspark 3s ease-in .5s infinite;
+    }
+
+        </style>
+
     </head>
-    <body>
-        <div id="drop-area" style="width: 300px; height: 300px; background-color: blue;">
+
+    <body style="padding: 0; margin: 0; background-color: black; height: 100vh; width: 100vw;">
+        <div id="drop-area" style="margin: 0; padding: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+            <div>
+                <span class="neon flicker">W</span><span class="neon normal">ebP</span>
+            </div>
         </div>
+
     </body>
+
 </html>
 <script src="/static/a.out.js"></script>
 <script>
     async function loadImage(blob) {
     }
+
+    /* Quality factor for WebPEncodeRGBA. 0-100, with 0 being the mostcompressed and 100 being the highest quality.*/
+    const QUALITY = 20;
 
     const dropArea = document.getElementById("drop-area");
 
@@ -42,7 +130,7 @@
           const buf = API.createBuffer(im.width, im.height);
           Module.HEAP8.set(imData.data, buf);
 
-          API.encode(buf, im.width, im.height, 0);
+          API.encode(buf, im.width, im.height, QUALITY);
 
           const resultPtr = API.getResultPtr();
           const resultSize = API.getResultSize();

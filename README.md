@@ -14,6 +14,8 @@ the result to a simple Python Flask backend.
 
 ## Install
 
+Run this in a Linux environment.
+
 Get the source code.
 
 `git clone git@github.com:angstyloop/wasm-webp-converter.git`
@@ -26,6 +28,15 @@ screen. Try a PNG or a JPG.
 
 ## Start the Flask server.
 
+### Brief
+git clone https://github.com/angstyloop/wasm-webp-converter.git
+cd wasm-webp-converter
+chmod u+x serve
+./serve
+
+
+### Description
+
 Run the Flask server with the following command.
 
 `./serve`
@@ -34,11 +45,6 @@ Once you do that, the WebP image will appear in the `./uploads/` folder
 of the repo root directory. You can open the image in a web browser and
 view it. WebP has a variable amount of compression - it is controlled by
 a quality factory (Q factor).
-
-Exercise for the reader: you extend this with a UI for the Q factor? You 
-shouldn't have to modify the WASM module at all - the WASM methods take
-Q as an argument. You just need to write some JavaScript for modifying
-Q, and then bind those JavaScript functions to HTML elements that you add.
 
 You should only need to edit `static/webp.html`, which contains the HTML and
 the JavaScript for the simple web page.
@@ -51,3 +57,13 @@ example. I used keyframes to create a "charging curve" for the color of
 the WebP logo. It gives the logo a halogen lamp effect. There are lots of
 examples of neat usages of keyframes like this one on the web if you google
 around a bit.
+
+# To Do
+
+Write a .ps1 script for `serve`.
+
+Exercise for the reader: can you extend this with a UI for the Q factor?
+You shouldn't have to modify the WASM module at all - the WASM methods take
+Q as an argument. You just need to write some JavaScript for modifying
+Q, and then bind those JavaScript functions to HTML elements that you add.
+

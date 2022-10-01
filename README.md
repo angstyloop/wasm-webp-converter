@@ -14,12 +14,20 @@ the result to a simple Python Flask backend.
 
 ## Install
 
-Run this in a Linux environment.
+For now, run this in a Linux environment.
 
 Get the source code.
 
 `git clone git@github.com:angstyloop/wasm-webp-converter.git`
 `cd wasm-webp-converter`
+
+Install pip.
+
+`sudo apt install python3-pip`
+
+Install Flask.
+
+`pip install flask`
 
 The WASM module has already been compiled, so you don't need to run the
 compile script. You just need to start the Flask server, open a web browser
@@ -29,10 +37,12 @@ screen. Try a PNG or a JPG.
 ## Start the Flask server.
 
 ### Brief
-git clone https://github.com/angstyloop/wasm-webp-converter.git
-cd wasm-webp-converter
-chmod u+x serve
-./serve
+`git clone https://github.com/angstyloop/wasm-webp-converter.git`
+`cd wasm-webp-converter`
+`sudo apt install python3-pip`
+`pip install flask`
+`chmod u+x serve`
+`./serve`
 
 
 ### Description

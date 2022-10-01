@@ -1,2 +1,4 @@
 #!/bin/sh
-python -m flask run
+
+mkdir -p uploads
+python3 -m flask run
